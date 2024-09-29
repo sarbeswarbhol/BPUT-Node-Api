@@ -1,2 +1,4 @@
 node_modules/
 referenceCode.js
+.env
+package-lock.json
