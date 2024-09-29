@@ -335,12 +335,44 @@ const getResultsWithDetailsAndHtml = asyncHandler(async (req, res) => {
         tr:hover {
             background-color: #f5f5f5;
         }
+        .print-button {
+            display: block;
+            margin: 20px 0;
+            padding: 10px 20px;
+            background-color: #002ed3;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .print-button:hover {
+            background-color: #001bb3;
+        }
         @media (max-width: 600px) {
             .container {
                 padding: 10px;
             }
             table {
                 font-size: 12px;
+            }
+        }
+        @media print {
+            /* Hide the print button */
+            .print-button {
+                display: none;
+            }
+
+            /* Optionally hide other elements that are not needed */
+            body * {
+                visibility: hidden; /* Hide everything */
+            }
+            .container, .container * {
+                visibility: visible; /* Show only the container and its children */
+            }
+            .container {
+                position: absolute; /* Position the container for printing */
+                left: 0;
+                top: 0;
             }
         }
     </style>
@@ -395,6 +427,7 @@ const getResultsWithDetailsAndHtml = asyncHandler(async (req, res) => {
                 <td>SGPA: ${sgpaDetails.sgpa}</td>
             </tr>
         </table>
+        <button class="print-button" onclick="window.print()">Print</button>
     </div>
 </body>
 </html>
