@@ -6,6 +6,6 @@ import { config } from 'dotenv';
 config(); 
 
 
-app.listen(process.env.PORT || PORT || 8000, () => {
-    console.log(`🖥️  Server is listening on the PORT ${process.env.PORT || PORT || 8000}`);
+app.listen(process.env.PORT || 8000, () => {
+    console.log(`🖥️  Server is listening on the PORT ${process.env.PORT || 8000}`);
 })
