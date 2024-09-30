@@ -1,3 +1,4 @@
+const DB_NAME = "bputApiTestBot"
 const BPUT_URL = "https://results.bput.ac.in";
 const GITHUB_HTML_URL = "https://raw.githubusercontent.com/Arctixinc/BPUT-CheatCode/api/templates/index.html";
 const PORT = 3000
@@ -49,4 +50,4 @@ const SHORT_CODE_SESSION = {
   "Odd-(2015-16)": "O15"
 }
 
-export { BPUT_URL, GITHUB_HTML_URL, PORT, HEADERS, SHORT_CODE_SESSION }
+export { DB_NAME, BPUT_URL, GITHUB_HTML_URL, PORT, HEADERS, SHORT_CODE_SESSION }
