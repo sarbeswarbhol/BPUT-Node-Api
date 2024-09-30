@@ -3,6 +3,7 @@ import { VisitHistory } from "../models/vistHistory.model.js";
 export const trackWebsiteVisit = async (req, res, next) => {
     const ip = req.ip;
     console.log(`IP: ${ip}`);
+    console.log(`Request: ${req}`);
 
     try {
         // Save the visit history with IP and timestamp
