@@ -9,7 +9,11 @@ const visitHistorySchema = new mongoose.Schema({
         type: Number,
         default: 1
     },
-    timestamp: {
+    firsttimestamp: {
+        type: Date,
+        default: Date.now,
+    },
+    lasttimestamp: {
         type: Date,
         default: Date.now,
     },

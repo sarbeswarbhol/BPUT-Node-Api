@@ -1,18 +1,53 @@
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js"
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { BPUT_URL, HEADERS } from "../constants.js";
-import fetch from 'node-fetch';
 import { VisitHistory } from "../models/vistHistory.model.js";
 import { ApiRouteAccess } from "../models/routeHistory.model.js";
 
 
 const getAllVisits = asyncHandler(async (req, res) => {
     try {
-        const visits = await VisitHistory.find();
-        res.status(200).json(visits);
+        const visits = await VisitHistory.aggregate([
+            {
+                $project: {
+                    _id: 0, 
+                    ip: 1,
+                    count: 1, 
+                    firstVisit: "$firsttimestamp", 
+                    lastVisit: "$lasttimestamp",   
+                }
+            },
+            {
+                $sort: { lastVisit: -1 } 
+            }
+        ]);
+        const wholeview = await VisitHistory.aggregate([
+            {
+                $group: {
+                    _id: null,
+                    totalViews: { $sum: "$count" }
+                }
+            }
+        ]);
+        const totalViews = wholeview.length > 0 ? wholeview[0].totalViews : 0;
+
+        return res
+        .status(200)
+        .json(new ApiResponse(
+        200,
+        { 
+            wholeview: totalViews,
+            visits
+        },
+        "Successfully Fetched"))
+
     } catch (error) {
-        res.status(500).json({ message: 'Server error while fetching visit history' });
+        return res
+        .status(500)
+        .json(new ApiResponse(
+        500,
+        {},
+        "Server error while fetching visit history"))
     }
 });
 
@@ -35,9 +70,19 @@ const getRouteAccessData = asyncHandler(async (req, res) => {
                 },
             },
         ]);
-        res.status(200).json(routeAccessData);
+        return res
+        .status(200)
+        .json(new ApiResponse(
+        200,
+        { routeAccessData },
+        "Successfully Fetched"))
     } catch (error) {
-        res.status(500).json({ message: 'Server error while fetching API route access data' });
+        return res
+        .status(500)
+        .json(new ApiResponse(
+        500,
+        {},
+        "Server error while fetching API route access data"))
     }   
 });
 

@@ -13,20 +13,19 @@ export const trackWebsiteVisit = async (req, res, next) => {
         const visitHistoryFind = await VisitHistory.findOne({ ip });
 
         if (!visitHistoryFind) {
-           const newVisit = new VisitHistory({
-            ip,
-            timestamp: new Date()
-           }) 
-           await newVisit.save();
+            await VisitHistory.create({ ip });
         } else {
             visitHistoryFind.count += 1;
+            visitHistoryFind.lasttimestamp = Date.now();
             await visitHistoryFind.save()
         }
-
-
         next();
     } catch (error) {
-        console.error('Error tracking website visit:', error);
-        res.status(500).json({ message: 'Server error while tracking website visit' });
+        return res
+        .status(500)
+        .json(new ApiResponse(
+        500,
+        {},
+        "Server error"))
     }
 };
