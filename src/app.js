@@ -31,7 +31,8 @@ const app = express();
 app.use(trackWebsiteVisit);
 
 // app.use("/api/v1/*", trackApiRouteAccess);
-app.set('trust proxy', 1);
+// app.set('trust proxy', 1);
+app.enable('trust proxy')
 
 import resultRouter from './routes/result.routes.js';
 import detailsRouter from "./routes/details.routes.js";
