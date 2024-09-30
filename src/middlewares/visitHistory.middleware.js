@@ -2,7 +2,6 @@ import { VisitHistory } from "../models/vistHistory.model.js";
 
 export const trackWebsiteVisit = async (req, res, next) => {
     const ip = req.ip;
-    console.log(`Route: ${route}`);
     console.log(`IP: ${ip}`);
 
     try {
