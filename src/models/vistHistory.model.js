@@ -7,7 +7,7 @@ const visitHistorySchema = new mongoose.Schema({
     },
     count: {
         type: Number,
-        default: 0
+        default: 1
     },
     timestamp: {
         type: Date,
