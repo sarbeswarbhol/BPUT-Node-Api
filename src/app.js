@@ -25,11 +25,12 @@
 import express from "express";
 import { trackWebsiteVisit } from './middlewares/visitHistory.middleware.js';
 import { trackApiRouteAccess } from './middlewares/routeHistory.middleware.js';
+import { verifyApiToken } from "./middlewares/token.middleware.js";
 
 const app = express();
 
 app.use(trackWebsiteVisit);
-
+app.use(express.json());
 // app.use("/api/v1/*", trackApiRouteAccess);
 // app.set('trust proxy', 1);
 app.enable('trust proxy')
@@ -42,11 +43,12 @@ import allSessionRouter from "./routes/allsession.routes.js";
 import visitRouter from "./routes/visit.routes.js";
 
 
-app.use("/api/v1/result", trackApiRouteAccess, resultRouter);
-app.use("/api/v1/details", trackApiRouteAccess, detailsRouter);
-app.use("/api/v1/examinfo", trackApiRouteAccess, examinfoRouter);
-app.use("/api/v1/sgpa", trackApiRouteAccess, sgpaRouter);
-app.use("/api/v1/allsession", trackApiRouteAccess, allSessionRouter);
+app.use("/api/v1/result", verifyApiToken, trackApiRouteAccess, resultRouter);
+app.use("/api/v1/details", verifyApiToken, trackApiRouteAccess, detailsRouter);
+app.use("/api/v1/examinfo", verifyApiToken, trackApiRouteAccess, examinfoRouter);
+app.use("/api/v1/sgpa", verifyApiToken, trackApiRouteAccess, sgpaRouter);
+app.use("/api/v1/allsession", verifyApiToken, trackApiRouteAccess, allSessionRouter);
+
 app.use("/api/v1/stats", visitRouter);
 
 export { app };

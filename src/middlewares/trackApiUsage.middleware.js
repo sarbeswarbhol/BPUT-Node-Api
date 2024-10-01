@@ -39,8 +39,12 @@ export const trackApiUsage = async ( req, res, next ) => {
         
 
         next();
-    } catch (error) {
-        
-        throw new ApiError(500, "Server Error")
+    } catch (error) {       
+        return res
+        .status(500)
+        .json(new ApiResponse(
+        500,
+        {},
+        "Server error"))
     }
 };

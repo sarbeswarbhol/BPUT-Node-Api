@@ -28,7 +28,7 @@ const visitCountSchema = new mongoose.Schema({
     count: {
         type: Number,
         default: 0,
-    },
+    }
 });
 const VisitHistory = mongoose.model('VisitHistory', visitHistorySchema);
 const VisitCount = mongoose.model('VisitCount', visitCountSchema);
