@@ -19,6 +19,18 @@ const visitHistorySchema = new mongoose.Schema({
     },
 });
 
+const visitCountSchema = new mongoose.Schema({
+    date: {
+        type: Date,
+        required: true,
+        unique: true,
+    },
+    count: {
+        type: Number,
+        default: 0,
+    },
+});
 const VisitHistory = mongoose.model('VisitHistory', visitHistorySchema);
+const VisitCount = mongoose.model('VisitCount', visitCountSchema);
 
-export { VisitHistory };
+export { VisitHistory, VisitCount };
