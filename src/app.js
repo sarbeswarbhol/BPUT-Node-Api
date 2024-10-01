@@ -32,17 +32,17 @@ import { verifyApiToken } from "./middlewares/token.middleware.js";
 
 const app = express();
 
-app.set('trust proxy', 1);
+// app.set('trust proxy', 1);
 
 const apilimiter = rateLimit({
     windowMs: 1*60*1000,
     max: 2,
-    message: "You have exceeded the 100 requests in a minutes Limit"
+    message: `You have exceeded the 2 requests in a minutes Limit`
 })
 
 app.use(express.json());
 app.use(trackWebsiteVisit);
-// app.enable('trust proxy')
+app.enable('trust proxy')
 
 import resultRouter from './routes/result.routes.js';
 import detailsRouter from "./routes/details.routes.js";
