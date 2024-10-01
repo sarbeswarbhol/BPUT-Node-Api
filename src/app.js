@@ -35,7 +35,7 @@ const app = express();
 app.set('trust proxy', 1);
 
 const apilimiter = rateLimit({
-    windowMs: 1*60*1000,
+    windowMs: 5*60*1000,
     max: 100,
     message: `You have exceeded the 100 requests in a minutes Limit`
 })
