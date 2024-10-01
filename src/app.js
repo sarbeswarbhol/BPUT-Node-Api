@@ -42,7 +42,7 @@ const apilimiter = rateLimit({
 
 app.use(express.json());
 app.use(trackWebsiteVisit);
-app.enable('trust proxy')
+// app.enable('trust proxy')
 
 import resultRouter from './routes/result.routes.js';
 import detailsRouter from "./routes/details.routes.js";
