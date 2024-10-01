@@ -47,7 +47,9 @@ app.use("/api/v1/result", verifyApiToken, trackApiRouteAccess, resultRouter);
 app.use("/api/v1/details", verifyApiToken, trackApiRouteAccess, detailsRouter);
 app.use("/api/v1/examinfo", verifyApiToken, trackApiRouteAccess, examinfoRouter);
 app.use("/api/v1/sgpa", verifyApiToken, trackApiRouteAccess, sgpaRouter);
-app.use("/api/v1/allsession", verifyApiToken, trackApiRouteAccess, allSessionRouter);
+
+
+app.use("/api/v1/allsession", trackApiRouteAccess, allSessionRouter);
 
 app.use("/api/v1/stats", visitRouter);
 
