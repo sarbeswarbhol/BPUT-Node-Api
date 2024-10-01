@@ -32,7 +32,7 @@ import { verifyApiToken } from "./middlewares/token.middleware.js";
 
 const app = express();
 
-// app.set('trust proxy', 1);
+app.set('trust proxy', 1);
 
 const apilimiter = rateLimit({
     windowMs: 1*60*1000,
