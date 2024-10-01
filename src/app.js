@@ -23,17 +23,26 @@
 
 
 import express from "express";
+import rateLimit from "express-rate-limit";
 import { trackWebsiteVisit } from './middlewares/visitHistory.middleware.js';
 import { trackApiRouteAccess } from './middlewares/routeHistory.middleware.js';
 import { verifyApiToken } from "./middlewares/token.middleware.js";
 
+// app.use("/api/v1/*", trackApiRouteAccess);
+
 const app = express();
 
-app.use(trackWebsiteVisit);
+app.set('trust proxy', 1);
+
+const apilimiter = rateLimit({
+    windowMs: 1*60*1000,
+    max: 2,
+    message: "You have exceeded the 100 requests in a minutes Limit"
+})
+
 app.use(express.json());
-// app.use("/api/v1/*", trackApiRouteAccess);
-// app.set('trust proxy', 1);
-app.enable('trust proxy')
+app.use(trackWebsiteVisit);
+// app.enable('trust proxy')
 
 import resultRouter from './routes/result.routes.js';
 import detailsRouter from "./routes/details.routes.js";
@@ -43,10 +52,10 @@ import allSessionRouter from "./routes/allsession.routes.js";
 import visitRouter from "./routes/visit.routes.js";
 
 
-app.use("/api/v1/result", verifyApiToken, trackApiRouteAccess, resultRouter);
-app.use("/api/v1/details", verifyApiToken, trackApiRouteAccess, detailsRouter);
-app.use("/api/v1/examinfo", verifyApiToken, trackApiRouteAccess, examinfoRouter);
-app.use("/api/v1/sgpa", verifyApiToken, trackApiRouteAccess, sgpaRouter);
+app.use("/api/v1/result", verifyApiToken, apilimiter, trackApiRouteAccess, resultRouter);
+app.use("/api/v1/details", verifyApiToken, apilimiter, trackApiRouteAccess, detailsRouter);
+app.use("/api/v1/examinfo", verifyApiToken, apilimiter, trackApiRouteAccess, examinfoRouter);
+app.use("/api/v1/sgpa", verifyApiToken, apilimiter, trackApiRouteAccess, sgpaRouter);
 
 
 app.use("/api/v1/allsession", trackApiRouteAccess, allSessionRouter);

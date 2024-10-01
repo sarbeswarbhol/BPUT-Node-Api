@@ -11,9 +11,9 @@ const getSgpa = asyncHandler(async (req, res) => {
     // http://localhost:3000/api/v1/result?semid=4&rollNo=2201364067&session=Even-(2023-24)
 
     const { rollno, semid, session } = req.query
-    console.log("rollno:- ", rollno)
-    console.log("semid:- ", semid)
-    console.log("session:- ", session)
+    // console.log("rollno:- ", rollno)
+    // console.log("semid:- ", semid)
+    // console.log("session:- ", session)
     if (!(rollno && semid && session)) {
         return res
             .status(404)

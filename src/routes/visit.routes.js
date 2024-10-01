@@ -14,6 +14,6 @@ router.route("/visits").get(getAllVisits)
 router.route("/routes").get(getRouteAccessData)
 router.route("/datewise").get(getAllVisitsDateWise)
 router.route("/createtoken").post(generateApiToken).get(generateApiToken)
-router.route("/showalltoken").get(getTokenDetails)
+router.route("/showtoken").get(getTokenDetails)
 
 export default router
