@@ -113,11 +113,21 @@ const generateApiToken = asyncHandler(async (req, res) => {
 
 
 const getTokenDetails = asyncHandler(async (req, res) => {
+    const { username, token } = req.query;
+
     try {
-        // Aggregation pipeline
+        // If no username or token is provided, return all token details
+        let query = {};
+        if (username) {
+            query = { username };
+        } else if (token) {
+            query = { token };
+        }
+
+        // Perform aggregation based on the provided query or return all
         const result = await ApiToken.aggregate([
+            { $match: query },  // Match by username or token, or return all if query is empty
             {
-                // Step 1: Project the necessary fields, exclude _id
                 $project: {
                     _id: 0,  // Exclude _id from the result
                     token: 1,
@@ -131,29 +141,28 @@ const getTokenDetails = asyncHandler(async (req, res) => {
             }
         ]);
 
-        // If data exists, send it as a response
         if (result.length > 0) {
             return res.status(200).json(new ApiResponse(
-            200,
-            {result},
-            "Token details fetched successfully."
-        ));         
+                200,
+                result,
+                "Token details fetched successfully."
+            ));
         } else {
             return res.status(404).json(new ApiResponse(
-            404,
-            {result},
-            "No token details found."
-        ));         
+                404,
+                {},
+                "No token details found."
+            ));
         }
     } catch (error) {
-        console.error(error);
+        console.error("Error fetching token details:", error);
         return res.status(500).json(new ApiResponse(
             500,
             {},
-            "An error occurred while fetching token details"
+            "An error occurred while fetching token details."
         ));
     }
-})
+});
 
 
 
