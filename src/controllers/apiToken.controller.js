@@ -111,4 +111,50 @@ const generateApiToken = asyncHandler(async (req, res) => {
     }
 });
 
-export { generateApiToken };
+
+const getTokenDetails = asyncHandler(async (req, res) => {
+    try {
+        // Aggregation pipeline
+        const result = await ApiToken.aggregate([
+            {
+                // Step 1: Project the necessary fields, exclude _id
+                $project: {
+                    _id: 0,  // Exclude _id from the result
+                    token: 1,
+                    username: 1,
+                    email: 1,
+                    dailyLimit: 1,
+                    expirationDate: 1,
+                    usageToday: 1,
+                    lastUsed: 1
+                }
+            }
+        ]);
+
+        // If data exists, send it as a response
+        if (result.length > 0) {
+            return res.status(200).json(new ApiResponse(
+            200,
+            {result},
+            "Token details fetched successfully."
+        ));         
+        } else {
+            return res.status(404).json(new ApiResponse(
+            404,
+            {result},
+            "No token details found."
+        ));         
+        }
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json(new ApiResponse(
+            500,
+            {},
+            "An error occurred while fetching token details"
+        ));
+    }
+})
+
+
+
+export { generateApiToken, getTokenDetails };
