@@ -36,8 +36,8 @@ app.set('trust proxy', 1);
 
 const apilimiter = rateLimit({
     windowMs: 1*60*1000,
-    max: 2,
-    message: `You have exceeded the 2 requests in a minutes Limit`
+    max: 100,
+    message: `You have exceeded the 100 requests in a minutes Limit`
 })
 
 app.use(express.json());
