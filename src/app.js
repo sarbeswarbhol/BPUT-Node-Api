@@ -50,6 +50,7 @@ import examinfoRouter from "./routes/examinfo.routes.js";
 import sgpaRouter from "./routes/sgpa.routes.js";
 import allSessionRouter from "./routes/allsession.routes.js";
 import visitRouter from "./routes/visit.routes.js";
+import statusRouter from "./routes/status.routes.js";
 
 
 app.use("/api/v1/result", verifyApiToken, apilimiter, trackApiRouteAccess, resultRouter);
@@ -61,6 +62,7 @@ app.use("/api/v1/sgpa", verifyApiToken, apilimiter, trackApiRouteAccess, sgpaRou
 app.use("/api/v1/allsession", trackApiRouteAccess, allSessionRouter);
 
 app.use("/api/v1/stats", visitRouter);
+app.use("/api/v1/status", statusRouter);
 
 export { app };
 
