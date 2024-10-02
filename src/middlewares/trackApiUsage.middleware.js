@@ -12,7 +12,7 @@ export const trackApiUsage = async ( req, res, next ) => {
         
 
         if (!userRecord) {
-            userRecord = new UserVisit({ ip });
+            userRecord = new UserVisit({ ip, lastVisit: Date.now() });
             await userRecord.save();
             
         } else {
@@ -35,10 +35,11 @@ export const trackApiUsage = async ( req, res, next ) => {
             
         }
 
-        const savedata = await visitrecord.save();
+        await visitrecord.save();
         
 
         next();
+
     } catch (error) {       
         return res
         .status(500)
