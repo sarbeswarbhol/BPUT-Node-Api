@@ -48,7 +48,7 @@ app.use("/api/v1/sgpa", verifyApiToken, apilimiter, trackApiRouteAccess, sgpaRou
 app.use("/api/v1/allsession", trackApiRouteAccess, allSessionRouter);
 
 app.use("/api/v1/stats", visitRouter);
-app.use("/api/v1/status", statusRouter);
+app.use("/api/v1/status", trackApiRouteAccess, statusRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/otp", otpRouter);
 
