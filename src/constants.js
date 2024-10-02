@@ -1,4 +1,4 @@
-const DB_NAME = "bputApiTestBot"
+const DB_NAME = "bputApiTestBotStart"
 const BPUT_URL = "https://results.bput.ac.in";
 const GITHUB_HTML_URL = "https://raw.githubusercontent.com/Arctixinc/BPUT-CheatCode/api/templates/index.html";
 const PORT = 3000
