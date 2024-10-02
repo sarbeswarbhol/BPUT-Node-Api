@@ -19,6 +19,14 @@ const apilimiter = rateLimit({
 app.use(express.json());
 app.use(trackWebsiteVisit);
 // app.enable('trust proxy')
+app.use((req, res, next) => {
+    const realIp = req.headers['cf-connecting-ip'] || req.ip;
+    console.log('Real IP:', realIp);
+    console.log('header IP:', req.headers['cf-connecting-ip'] );
+    console.log('req IP:', req.ip);
+    next();
+});
+
 
 import resultRouter from './routes/result.routes.js';
 import detailsRouter from "./routes/details.routes.js";
