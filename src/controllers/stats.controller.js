@@ -72,7 +72,7 @@ const getAllVisits = asyncHandler(async (req, res) => {
         .status(500)
         .json(new ApiResponse(
         500,
-        {},
+        {error.message},
         "Server error while fetching visit history"))
     }
 });
