@@ -34,7 +34,7 @@ const getAllVisits = asyncHandler(async (req, res) => {
                     totalCount: 1, 
                     firstVisit: {
                         $dateToString: {
-                            format: "%Y-%m-%d %I:%M:%S %p", // Format for 12-hour clock with AM/PM
+                            format: "%Y-%m-%d %l:%M:%S %p", // Format for 12-hour clock with AM/PM
                             date: {
                                 $add: ["$firstTimestamp", 19800000] // Convert to IST
                             }
@@ -42,7 +42,7 @@ const getAllVisits = asyncHandler(async (req, res) => {
                     },
                     lastVisit: {
                         $dateToString: {
-                            format: "%Y-%m-%d %I:%M:%S %p", // Format for 12-hour clock with AM/PM
+                            format: "%Y-%m-%d %l:%M:%S %p", // Format for 12-hour clock with AM/PM
                             date: {
                                 $add: ["$lastTimestamp", 19800000] // Convert to IST
                             }
