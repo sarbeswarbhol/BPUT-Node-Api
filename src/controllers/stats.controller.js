@@ -4,63 +4,62 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { VisitHistory } from "../models/vistHistory.model.js";
 import { ApiRouteAccess } from "../models/routeHistory.model.js";
 
+const formatDateToIST = (date) => {
+    const options = { 
+        year: 'numeric', 
+        month: '2-digit', 
+        day: '2-digit', 
+        hour: 'numeric', 
+        minute: 'numeric', 
+        second: 'numeric', 
+        hour12: true,
+        timeZone: 'Asia/Kolkata' // IST time zone
+    };
+    return new Intl.DateTimeFormat('en-US', options).format(date);
+};
+
 const getAllVisits = asyncHandler(async (req, res) => {
     try {
         const totalViewsResult = await VisitHistory.aggregate([
             {
                 $group: {
-                    _id: null,
-                    totalViews: { $sum: "$count" }
+                    _id: null, // Grouping by null to get a single result
+                    totalViews: { $sum: "$count" } // Sum the counts
                 }
             }
         ]);
 
         const totalViews = totalViewsResult.length > 0 ? totalViewsResult[0].totalViews : 0;
 
-
+        // Get visits by IP with additional details, sorted by most recent activity
         const visitsByIP = await VisitHistory.aggregate([
             {
                 $group: {
-                    _id: "$ip",
-                    totalCount: { $sum: "$count" },
-                    firstTimestamp: { $min: "$firsttimestamp" },
-                    lastTimestamp: { $max: "$lasttimestamp" } 
+                    _id: "$ip", // Group by the IP address
+                    totalCount: { $sum: "$count" }, // Sum the visit counts for each IP
+                    firstTimestamp: { $min: "$firsttimestamp" }, // Earliest visit
+                    lastTimestamp: { $max: "$lasttimestamp" } // Latest visit
                 }
             },
             {
-                $project: {
-                    _id: 0, 
-                    ip: "$_id",
-                    totalCount: 1, 
-                    firstVisit: {
-                        $dateToString: {
-                            format: "%Y-%m-%d %l:%M:%S %p", // Format for 12-hour clock with AM/PM
-                            date: {
-                                $add: ["$firstTimestamp", 19800000] // Convert to IST
-                            }
-                        }
-                    },
-                    lastVisit: {
-                        $dateToString: {
-                            format: "%Y-%m-%d %l:%M:%S %p", // Format for 12-hour clock with AM/PM
-                            date: {
-                                $add: ["$lastTimestamp", 19800000] // Convert to IST
-                            }
-                        }
-                    }
-                }
-            },
-            {
-                $sort: { lastVisit: -1 } // Sort by lastTimestamp in descending order
+                $sort: { lastTimestamp: -1 } // Sort by lastTimestamp in descending order
             }
         ]);
+
+        // Format the dates after fetching the data
+        const formattedVisits = visitsByIP.map(visit => ({
+            ip: visit._id,
+            totalCount: visit.totalCount,
+            firstVisit: formatDateToIST(visit.firstTimestamp), // Format first visit date
+            lastVisit: formatDateToIST(visit.lastTimestamp) // Format last visit date
+        }));
 
         // Create the response object
         const response = {
             wholeView: totalViews,
-            visits: visitsByIP
+            visits: formattedVisits
         };
-
+        
         return res
         .status(200)
         .json(new ApiResponse(
